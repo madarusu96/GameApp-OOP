@@ -2,16 +2,12 @@
 //- FetchApi: aici aveam doar call-uri catre api nostru, 
 //fiecare va fi o metoda separata. De exemplu: getGameById, updateGame, deleteGame etc
 console.log('intra in fetchapi');
-function FetchApi(url){
-    this.url=apiURL;
-    this.getGamesList();
-    this.deleteGame();
-    this.createGameRequest();
- 
-
+function FetchApi(apiURL){
+    this.apiURL=apiURL;
+    //console.log('apiURL'+apiURL)
 }
-FetchApi.prototype.getGamesList= function(callbackFunction){
-    fetch(apiURL + "/games", {
+FetchApi.prototype.getGamesList= function(){
+     return fetch(`${this.apiURL}/games`,{
         method: "GET",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -19,25 +15,21 @@ FetchApi.prototype.getGamesList= function(callbackFunction){
     }).then(function(response){
         console.log('aduce jocurile ')
         return response.json();
-    }).then(function(arrayOfGames){
-        callbackFunction(arrayOfGames);
     });
 
 }
 
-FetchApi.prototype.deleteGame= function(gameID,callbackFunction){
-    fetch(apiURL + "/games/" + gameID, {
+FetchApi.prototype.deleteGame= function(gameID){
+    return fetch(`${apiURL}/games/${gameID}`, {
         method: "DELETE"
     }).then(function(r){
         return r.text();
-    }).then(function(apiresponse){
-        callbackFunction(apiresponse);
     });
 
 }
 
-FetchApi.prototype.createGameRequest = function (gameObject,callbackCreateGame){
-    fetch(apiURL + "/games", {
+FetchApi.prototype.createGameRequest = function (gameObject){
+    return  fetch(`${this.apiURL}/games`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -45,15 +37,12 @@ FetchApi.prototype.createGameRequest = function (gameObject,callbackCreateGame){
         body: gameObject
     }).then(function(response){
         return response.json();
-    }).then(function(createdGame){
-        console.log(createdGame);
-        callbackCreateGame(createdGame);
     });
 
 }
 
 FetchApi.prototype.updateGameRequest = function (updatedGameObj,callbackCreateGame){
-    fetch(apiURL + "/games", {
+    return fetch(`${this.apiURL}/games`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -61,9 +50,6 @@ FetchApi.prototype.updateGameRequest = function (updatedGameObj,callbackCreateGa
         body: gameObject
     }).then(function(response){
         return response.json();
-    }).then(function(updatedGame){
-        console.log(updatedGame);
-        callbackCreateGame(updatedGame);
     });
 
 }
